@@ -1,1 +1,0 @@
-I just noticed that I never connected the format table to the book table so I'm gonna have to do that after I get this api functioning.
