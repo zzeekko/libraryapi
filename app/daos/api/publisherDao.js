@@ -1,7 +1,7 @@
 const con = require('../../config/dbconfig')
 
 const publisherDao = {
-    table: 'book',
+    table: 'publisher',
 
     findBookByPublisher: (res, table, publisher)=> {
         con.execute(
