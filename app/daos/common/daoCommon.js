@@ -67,6 +67,9 @@ const daoCommon = {
             })
         } else {
 
+            const genres = req.body.genres
+            delete req.body.genres
+            delete req.body.format
             const fields = Object.keys(req.body)
             const values = Object.values(req.body)
 
@@ -75,12 +78,29 @@ const daoCommon = {
                 values,
                 (error, dbres)=> {
                     if (!error) {
-                        res.json({
-                            Last_id: dbres.insertId
-                        })
-                    } else {
-                        console.log(`${table}Dao error: `, error)
-                    }
+                            if (genres != undefined & genres.length != 0) {
+                                // const joinRows = genres.map(g => `(${dbres.InsertId}, ${g})`).join(",")
+                                con.execute(
+                                    `INSERT INTO book_to_genre (book_id, genre_id) VALUES ${genres.map(g => `(${dbres.insertId}, ${g})`).join(",")};`, [],(error, dbres)=> {
+                                        //  `INSERT INTO book_to_genre (book_id, genre_id) VALUES ?;`, genres.map(g => [dbres.insertId, g]), (error, dbres)=> {
+                                        if (!error) {
+                                             res.json({
+                                                Last_id: dbres.insertId
+                                            })
+                                        } else {
+                                            console.log(`${table}Dao error: `, error)
+                                        }
+                                    }  
+                                )
+                            } else {
+                                res.json({
+                                    Last_id: dbres.insertId
+                                })
+                            }
+                        } else {
+                            console.log(`${table}Dao error: `, error)
+                        }
+
                 }
             )
         }

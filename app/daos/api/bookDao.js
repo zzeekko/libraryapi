@@ -5,12 +5,11 @@ const bookDao = {
 
     findBook: (res, table) => {
         con.execute(
-            `SELECT ${table}.book_id, ${table}.title, a.author_id, a.author, p.publisher_id, p.publisher, ${table}.copyright_year, f.format_id, f.format, 
+            `SELECT ${table}.book_id, ${table}.title, a.author_id, a.author, p.publisher_id, p.publisher, ${table}.copyright_year, 
             ${table}.edition, ${table}.edition_year, ${table}.binding, ${table}.language, ${table}.rating, ${table}.num_pages, ${table}.cover_image, ${table}.qty
             FROM ${table}
             JOIN author a USING (author_id)
             JOIN publisher p USING (publisher_id)
-            JOIN format f USING (format_id)
             ORDER BY ${table}.book_id;`,
             (error, rows) => {
                 if (!error) {
@@ -47,9 +46,8 @@ const bookDao = {
                     });
                     con.execute(
                         `SELECT b.book_id, b.title, f.format_id, f.format
-                        FROM book_to_format bf
-                        JOIN book b ON b.book_id = bf.book_id
-                        JOIN format f ON f.format_id = bf.format_id
+                        FROM book b
+                        JOIN format f USING (format_id)
                         WHERE b.book_id = ?;`,
                         [id],
                         (error, rows) => {
@@ -72,7 +70,7 @@ const bookDao = {
                                                 row.genres = genres;
                                                 row.formats = formats;
                                             });
-
+                                            console.log(rows)
                                             if (rows.length === 1) {
                                                 res.json(...rows);
                                             } else {
