@@ -15,6 +15,10 @@ router.get('/books/:author_id', (req, res)=> {
     dao.findBookByAuthor(res, dao.table, req.params.author_id)
 })
 
+router.post('/post', (req, res)=> {
+    dao.create(req, res, dao.table)
+})
+
 router.get('/:id', (req, res)=> {
     dao.findById(res, dao.table, req.params.id)
 })
