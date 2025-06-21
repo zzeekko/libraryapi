@@ -11,7 +11,6 @@ router.get('/count', (req, res)=> {
     dao.countAll(res, dao.table)
 })
 
-
 router.post('/post', (req, res)=> {
     dao.create(req, res, dao.table)
 })
